@@ -32,7 +32,19 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
-  Paperclip.options[:command_path] = "/usr/local/bin"
+  # configs papaerclip gem to use S3
+  config.paperclip_defaults = {
+    :storage => :s3,
+    :s3_credentials => {
+
+      # NOTE: these lines are changed to use secrets.yml
+      # from the examples (which use ENV vars instead)
+      :bucket => Rails.application.secrets.s3_bucket_name,
+      :access_key_id => Rails.application.secrets.aws_access_key_id,
+      :secret_access_key => Rails.application.secrets.aws_secret_access_key
+    }
+  }
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
